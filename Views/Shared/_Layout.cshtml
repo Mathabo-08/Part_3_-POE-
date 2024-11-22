@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Claim System</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="~/">Home</a></li>
+                <li><a href="~/Claims">Claims</a></li>
+                <li><a href="~/ModuleSchedule">Module Schedule</a></li> <!-- Added navigation link -->
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <!-- Render Scripts Section if it exists -->
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

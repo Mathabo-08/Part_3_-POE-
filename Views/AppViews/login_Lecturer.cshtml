@@ -1,0 +1,45 @@
+﻿@model Claim_System.Models.Lecturer
+
+@{
+    ViewData["Title"] = "Lecturer Login";
+}
+
+<h2>Lecturer Login</h2>
+
+<!-- Login Form -->
+<form method="post">
+    <!-- Lecturer Email -->
+    <div class="form-group">
+        <label for="lecturerEmail">Email</label>
+        <input type="email" id="lecturerEmail" name="lecturerEmail" class="form-control" value="@ViewBag.LecturerEmail" required />
+    </div>
+
+    <!-- Lecturer Password (Still included, but not validated) -->
+    <div class="form-group">
+        <label for="lecturerPassword">Password</label>
+        <input type="password" id="lecturerPassword" name="lecturerPassword" class="form-control" required />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+
+    <!-- Error Message -->
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
+    <!-- Debug Information (recent improvements) -->
+    @if (ViewBag.LecturerEmail != null)
+    {
+        <div class="alert alert-info mt-3">
+            Last entered Email: @ViewBag.LecturerEmail
+        </div>
+    }
+</form>
+
+<a href="@Url.Action("userType", "UserType")" class="button-link">Home</a>

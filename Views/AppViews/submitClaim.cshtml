@@ -1,0 +1,96 @@
+﻿@model Claim_System.Models.Claim
+
+@{
+    ViewData["Title"] = "Submit Claim";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Display Success Message -->
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.SuccessMessage
+    </div>
+}
+
+<!-- Display Error Message -->
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<form method="post" enctype="multipart/form-data" asp-action="submitClaim">
+    @Html.AntiForgeryToken() <!-- AntiForgeryToken for additional security -->
+
+    <div class="form-group">
+        <label for="ClaimDate">Claim Date</label>
+        <input type="date" class="form-control" id="ClaimDate" asp-for="ClaimDate" />
+        <span asp-validation-for="ClaimDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="EmployeeNumber">Employee Number</label>
+        <input type="text" class="form-control" id="EmployeeNumber" asp-for="EmployeeNumber" />
+        <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="LecturerEmail">Lecturer Email</label>
+        <input type="email" class="form-control" id="LecturerEmail" asp-for="LecturerEmail" readonly />
+        <span asp-validation-for="LecturerEmail" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Course">Course</label>
+        <input type="text" class="form-control" id="Course" asp-for="Course" />
+        <span asp-validation-for="Course" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="ModuleCode">Module Code</label>
+        <input type="text" class="form-control" id="ModuleCode" asp-for="ModuleCode" />
+        <span asp-validation-for="ModuleCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Amount">Amount</label>
+        <input type="number" class="form-control" id="Amount" asp-for="Amount" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="MonthlyHoursWorked">Monthly Hours Worked</label>
+        <input type="number" class="form-control" id="MonthlyHoursWorked" asp-for="MonthlyHoursWorked" />
+        <span asp-validation-for="MonthlyHoursWorked" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="HourlyRate">Hourly Rate</label>
+        <input type="number" class="form-control" id="HourlyRate" asp-for="HourlyRate" />
+        <span asp-validation-for="HourlyRate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="SupportDocument">Upload Supporting Document (Optional)</label>
+        <input type="file" class="form-control" id="SupportDocument" name="SupportDocument" />
+        <span asp-validation-for="SupportDocument" class="text-danger"></span>
+
+        @if (!string.IsNullOrEmpty(Model.SupportDocument))
+        {
+            <p>Current File: <a href="@Model.SupportDocument" target="_blank">View Uploaded File</a></p>
+        }
+    </div>
+
+    <!-- Action Buttons Wrapper -->
+    <div class="action-buttons">
+        <button type="submit" class="button-link">Submit Claim</button>
+
+        <!-- View Submitted Claims button always visible -->
+        <a href="@Url.Action("viewSubmittedClaims", "Lecturer")" class="button-link">View Submitted Claims</a>
+    </div>
+</form>
+
+<a href="@Url.Action("userType", "UserType")" class="button-link">Home</a>

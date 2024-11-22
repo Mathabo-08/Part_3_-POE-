@@ -1,0 +1,47 @@
+﻿@model List<Claim_System.Models.ClaimStatusViewModel>
+
+@{
+    ViewData["Title"] = "Claim Statuses";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="claim-container">
+            <h3>Claim for @item.Claims.FirstOrDefault()?.LecturerEmail</h3>
+            <p><strong>Claim Date:</strong> @item.Claims.FirstOrDefault()?.ClaimDate.ToString("yyyy-MM-dd")</p>
+            <p><strong>Course:</strong> @item.Claims.FirstOrDefault()?.Course</p>
+            <p><strong>Model Code:</strong> @item.Claims.FirstOrDefault()?.ModuleCode</p>
+            <p><strong>Monthly Hours worked:</strong> @item.Claims.FirstOrDefault()?.MonthlyHoursWorked</p>
+            <p><strong>Hourly Rate:</strong> @item.Claims.FirstOrDefault()?.HourlyRate</p>
+            <p><strong>Amount:</strong> @item.Claims.FirstOrDefault()?.Amount.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</p>
+
+            <div>
+                <ul>
+                    @foreach (var status in item.ClaimStatuses)
+                    {
+                        <li>
+                            <p><strong>Date Updated:</strong> @status.DateUpdated.ToString("yyyy-MM-dd")</p>
+                            <p><strong>Status:</strong> @status.Status</p>
+                            <p><strong>Contractor Feedback:</strong> @status.ContractorFeedback</p>
+                            <p><strong>Contractor Type:</strong> @status.ContractorType</p>
+                            <p><strong>Contractor Campus:</strong> @status.ContractorWorkCampus</p>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- Horizontal line to separate claims -->
+        <hr />
+    }
+}
+else
+{
+    <p>No claims have been submitted or responded to.</p>
+}
+
+<a href="@Url.Action("userType", "UserType")" class="button-link">Home</a>

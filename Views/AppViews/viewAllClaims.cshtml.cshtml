@@ -1,0 +1,42 @@
+﻿@model List<Claim_System.Models.ClaimStatusViewModel>
+
+<h2>Claims Responded to by Contractors</h2>
+
+@if (!Model.Any())
+{
+    <p>No claims have been responded to by contractors yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Lecturer Email</th>
+                <th>Course</th>
+                <th>Module Code</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Last Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claimStatusViewModel in Model)
+            {
+                @foreach (var claim in claimStatusViewModel.Claims)
+                {
+                    <tr>
+                        <td>@claim.Id</td>
+                        <td>@claim.LecturerEmail</td>
+                        <td>@claim.Course</td>
+                        <td>@claim.ModuleCode</td>
+                        <td>@claim.Amount.ToString("C")</td>
+                        <td>@claimStatusViewModel.LatestStatus?.Status</td>
+                        <td>@claimStatusViewModel.LatestStatus?.DateUpdated.ToString("g")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+}

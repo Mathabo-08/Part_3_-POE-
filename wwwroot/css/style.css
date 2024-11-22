@@ -1,0 +1,115 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: orangered;
+}
+
+
+/* Horizontal navigation bar */
+nav {
+    margin-top: 20px;
+}
+
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        background-color: black;
+        display: flex; /* I Used flexbox for horizontal alignment */
+        justify-content: center; /* Center the links */
+    }
+
+    nav li {
+        margin: 0 10px; /* Add spacing between the links */
+    }
+
+        nav li a {
+            display: block;
+            color: orangered;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: medium;
+        }
+
+            nav li a:hover {
+                background-color: #333;
+            }
+
+/* Styling the forms */
+.form-container {
+    border: 2px solid #007bff; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    padding: 20px; /* Space inside the border */
+    max-width: 500px; /* Max width for the form */
+    margin: auto; /* Center the form on the page */
+    background-color: #f9f9f9; /* Light background for better visibility */
+    margin-bottom: 20px; /* Space below the form */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Space between form groups */
+}
+
+.form-control {
+    width: calc(100% - 20px); /* Full width minus padding */
+    padding: 10px; /* Padding inside input fields */
+    border-radius: 4px; /* Rounded corners for input fields */
+    border: 1px solid #ccc; /* Light border for input fields */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+/* User Type Webpage */
+.container {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.logo {
+    width: 280px; /* Adjust the width as needed */
+    margin-bottom: 20px;
+}
+
+.login-button {
+    background-color: purple;
+    color: white;
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 25px;
+    cursor: pointer;
+     
+}
+
+/* Styles for button-like link */
+.button-link {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: purple; /* Match the original button color */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s;
+    margin: 10px auto; /* Center link */
+}
+
+    .button-link:hover {
+        background-color: #5e2e8c; /* Darker purple on hover */
+    }
+
+/* Footer */
+footer {
+    margin-top: 10px;
+    color: orangered;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}

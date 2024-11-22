@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Pending Claims";
+}
+
+<h2>Pending Claims</h2>
+
+<!-- Success message -->
+<div id="successMessage" style="color: green; display: none;"></div>
+
+@if (Model.Count == 0)
+{
+    <p>No pending claims.</p>
+}
+else
+{
+    <table id="claimsTable">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Lecturer</th>
+                <th>Course</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr id="claimRow_@claim.Id">
+                    <td>@claim.Id</td>
+                    <td>@claim.LecturerEmail</td>
+                    <td>@claim.Course</td>
+                    <td>@claim.Amount</td>
+                    <td>@claim.Status</td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="openFeedbackForm(@claim.Id, 'Approved')">Approve</a> |
+                        <a href="javascript:void(0);" onclick="openFeedbackForm(@claim.Id, 'Rejected')">Reject</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Feedback Form Modal -->
+<div id="feedbackFormModal" style="display:none;">
+    <h3>Provide Feedback</h3>
+    <form id="feedbackForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="claimId" name="claimId" />
+        <input type="hidden" id="status" name="status" />
+
+        <div>
+            <label for="contractorFeedback">Feedback:</label>
+            <input type="text" id="contractorFeedback" name="contractorFeedback" required />
+        </div>
+
+        <div>
+            <label for="contractorType">Contractor Type:</label>
+            <input type="text" id="contractorType" name="contractorType" required />
+        </div>
+
+        <div>
+            <label for="contractorWorkCampus">Work Campus:</label>
+            <input type="text" id="contractorWorkCampus" name="contractorWorkCampus" required />
+        </div>
+
+        <button type="button" onclick="submitFeedback()">Submit Feedback</button>
+        <button type="button" onclick="closeFeedbackForm()">Cancel</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function openFeedbackForm(claimId, status) {
+                    document.getElementById("claimId").value = claimId;
+            document.getElementById("status").value = status;
+            document.getElementById("feedbackFormModal").style.display = "block";
+                }
+
+            function closeFeedbackForm() {
+                    document.getElementById("feedbackFormModal").style.display = "none";
+                }
+
+                function submitFeedback() {
+                    const form = document.getElementById("feedbackForm");
+                    const formData = new FormData(form);
+
+                    // Extract the anti-forgery token
+                    const token = form.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                    fetch('@Url.Action("ApproveRejectClaim", "Contractor")', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'RequestVerificationToken': token
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success message
+                            document.getElementById("successMessage").innerText = "Response sent successfully!";
+                            document.getElementById("successMessage").style.display = "block";
+
+                            // Remove the processed claim row from the table
+                            const claimId = document.getElementById("claimId").value;
+                            const claimRow = document.getElementById("claimRow_" + claimId);
+                            if (claimRow) {
+                                claimRow.remove();  // Remove the row after processing
+                            }
+
+                            closeFeedbackForm();
+                        } else {
+                            alert("Error: " + data.error);
+                        }
+                    })
+                    .catch(err => {
+                        alert("An error occurred while submitting feedback.");
+                    });
+                }
+    </script>
+}
+
+<a href="@Url.Action("userType", "UserType")" class="button-link">Home</a>

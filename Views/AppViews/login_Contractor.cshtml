@@ -1,0 +1,30 @@
+﻿@model Claim_System.Models.Contractor
+
+@{
+    ViewData["Title"] = "Contractor Login";
+}
+
+<h2>Contractor Login</h2>
+
+<form method="post">
+    <div>
+        <label for="contractorEmail">Email</label>
+        <input type="email" id="contractorEmail" name="contractorEmail" required />
+    </div>
+
+    <div>
+        <label for="contractorPassword">Password</label>
+        <input type="password" id="contractorPassword" name="contractorPassword" required />
+    </div>
+
+    <div>
+        <button type="submit">Login</button>
+    </div>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <p style="color:red;">@ViewBag.ErrorMessage</p>
+    }
+</form>
+
+<a href="@Url.Action("userType", "UserType")" class="button-link">Home</a>
