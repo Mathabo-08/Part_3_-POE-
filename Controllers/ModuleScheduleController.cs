@@ -28,7 +28,7 @@ public class ModuleScheduleController : Controller
         var model = new ModuleSchedule(); // Empty object for form input
 
         // Return the view with both the schedule data and the new model
-        return View("~/Views/ModuleSchedule/Index.cshtml", new ModuleScheduleViewModel
+        return View("~/Views/AppViews/Index.cshtml", new ModuleScheduleViewModel
         {
             Schedules = schedules,
             ScheduleForm = model

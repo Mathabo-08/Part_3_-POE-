@@ -7,7 +7,4 @@
         public string ModuleCode { get; set; }
         public string ReminderDay { get; set; }
     }
-
-
-
 }
