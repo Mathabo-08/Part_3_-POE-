@@ -9,5 +9,8 @@ namespace Claim_System.Models
 
         [Required] // Ensures this field is not nullable
         public string LecturerPassword { get; set; } // Password column
+
+        // Navigation property to access associated module schedules
+        public ICollection<ModuleSchedule> ModuleSchedules { get; set; }
     }
 }

@@ -1,10 +1,16 @@
-﻿@model IEnumerable<ModuleSchedule>
-@{
-    ViewData["Title"] = "Module Reminders";
+﻿@model ModuleScheduleViewModel
+
+<h2>Module Schedules</h2>
+
+<!-- Display success message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
 }
 
-<h2>Module Reminders</h2>
-
+<!-- Schedule Table -->
 <table class="table">
     <thead>
         <tr>
@@ -14,38 +20,37 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var schedule in Model)
+        @foreach (var schedule in Model.Schedules)
         {
             <tr>
                 <td>@schedule.ModuleCode</td>
                 <td>@schedule.ReminderDay</td>
                 <td>
-                    <form asp-action="DeleteReminder" asp-route-id="@schedule.Id" method="post">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    <a href="@Url.Action("DeleteReminder", "ModuleSchedule", new { id = schedule.Id })" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<h3>Add or Update Reminder</h3>
-<form asp-action="AddOrUpdateReminder" method="post">
+<!-- Reminder Form -->
+<h3>Add/Update Reminder</h3>
+<form method="post" asp-action="AddOrUpdateReminder">
     <div class="form-group">
         <label for="ModuleCode">Module Code</label>
-        <input type="text" name="ModuleCode" class="form-control" required />
+        <input type="text" id="ModuleCode" name="ModuleCode" class="form-control" value="@Model.ScheduleForm.ModuleCode" />
+        @Html.ValidationMessageFor(m => m.ModuleCode)
     </div>
+
     <div class="form-group">
         <label for="ReminderDay">Reminder Day</label>
-        <select name="ReminderDay" class="form-control" required>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-        </select>
+        <input type="text" id="ReminderDay" name="ReminderDay" class="form-control" value="@Model.ScheduleForm.ReminderDay" />
+        @Html.ValidationMessageFor(m => m.ReminderDay)
     </div>
+
     <button type="submit" class="btn btn-primary">Save Reminder</button>
 </form>
+
+
+<!-- Validation Summary -->
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })

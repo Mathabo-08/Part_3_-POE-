@@ -5,6 +5,7 @@ using Claim_System.Models;
 using Claim_System.Data;
 using System.Linq;
 using System;
+using System.IO;
 
 namespace Claim_System.Controllers
 {
@@ -49,6 +50,7 @@ namespace Claim_System.Controllers
                 _context.SaveChanges();
             }
 
+            // Save the lecturer email in session
             HttpContext.Session.SetString("LecturerEmail", lecturerEmail);
             return RedirectToAction("submitClaim", "Lecturer");
         }
@@ -164,6 +166,5 @@ namespace Claim_System.Controllers
 
             return View("~/Views/AppViews/claimStatus.cshtml", viewModel);
         }
-
     }
 }
