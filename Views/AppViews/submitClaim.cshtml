@@ -9,17 +9,17 @@
 <!-- Display Success Message -->
 @if (ViewBag.SuccessMessage != null)
 {
-    <div class="alert alert-success">
+        <div class="alert alert-success">
         @ViewBag.SuccessMessage
-    </div>
+        </div>
 }
 
 <!-- Display Error Message -->
 @if (ViewBag.ErrorMessage != null)
 {
-    <div class="alert alert-danger">
+        <div class="alert alert-danger">
         @ViewBag.ErrorMessage
-    </div>
+        </div>
 }
 
 <form method="post" enctype="multipart/form-data" asp-action="submitClaim">
@@ -78,9 +78,9 @@
         <input type="file" class="form-control" id="SupportDocument" name="SupportDocument" />
         <span asp-validation-for="SupportDocument" class="text-danger"></span>
 
-        @if (!string.IsNullOrEmpty(Model.SupportDocument))
+        @if (Model != null && !string.IsNullOrEmpty(Model.SupportDocument))
         {
-            <p>Current File: <a href="@Model.SupportDocument" target="_blank">View Uploaded File</a></p>
+                <p>Current File: <a href="@Model.SupportDocument" target="_blank">View Uploaded File</a></p>
         }
     </div>
 
@@ -93,4 +93,8 @@
     </div>
 </form>
 
-<a href="@Url.Action("userType", "UserType")" class="button-link">Home</a>
+<!-- Footer Links -->
+<div class="footer-links">
+    <a href="@Url.Action("userType", "UserType")" class="button-link">Home</a>
+    <a href="@Url.Action("ModuleScheduleReminder", "Lecturer")" class="button-link">Module Schedule</a>
+</div>

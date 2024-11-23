@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Claim_System.Models 
+namespace Claim_System.Models
 {
     public class Contractor
     {

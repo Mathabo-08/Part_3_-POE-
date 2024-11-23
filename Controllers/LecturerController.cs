@@ -50,7 +50,6 @@ namespace Claim_System.Controllers
                 _context.SaveChanges();
             }
 
-            // Save the lecturer email in session
             HttpContext.Session.SetString("LecturerEmail", lecturerEmail);
             return RedirectToAction("submitClaim", "Lecturer");
         }
@@ -91,6 +90,7 @@ namespace Claim_System.Controllers
             {
                 try
                 {
+                    // Handle the file upload for supporting document
                     if (supportDocument != null && supportDocument.Length > 0)
                     {
                         var fileExtension = Path.GetExtension(supportDocument.FileName).ToLower();
@@ -118,6 +118,7 @@ namespace Claim_System.Controllers
                         claim.SupportDocument = $"/claims_documents/{supportDocument.FileName}";
                     }
 
+                    // Save claim data to the database
                     _context.Claims.Add(claim);
                     _context.SaveChanges();
 
@@ -165,6 +166,114 @@ namespace Claim_System.Controllers
             }).ToList();
 
             return View("~/Views/AppViews/claimStatus.cshtml", viewModel);
+        }
+
+        // Action for fetching today's module reminders
+        public IActionResult GetModuleReminder()
+        {
+            var lecturerEmail = HttpContext.Session.GetString("LecturerEmail");
+
+            if (string.IsNullOrEmpty(lecturerEmail))
+            {
+                return RedirectToAction("login_Lecturer");
+            }
+
+            // Get today's day of the week
+            var currentDay = DateTime.Now.DayOfWeek.ToString();
+
+            // Fetch the schedule for the current day
+            var reminders = _context.ModuleSchedules
+                .Where(ms => ms.LecturerEmail == lecturerEmail && ms.ReminderDay == currentDay)
+                .Select(ms => new { ms.ModuleCode, ms.ReminderDay })
+                .ToList();
+
+            return Json(reminders);
+        }
+
+        // POST: Submit the module schedule reminder
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SubmitModuleScheduleReminder(string moduleCode, string reminderDay)
+        {
+            var lecturerEmail = HttpContext.Session.GetString("LecturerEmail");
+
+            if (string.IsNullOrEmpty(lecturerEmail))
+            {
+                return RedirectToAction("login_Lecturer");
+            }
+
+            if (string.IsNullOrEmpty(moduleCode) || string.IsNullOrEmpty(reminderDay))
+            {
+                ViewBag.ReminderErrorMessage = "Module Code and Reminder Day are required.";
+                return View("~/Views/AppViews/submitClaim.cshtml");
+            }
+
+            try
+            {
+                // Check if a reminder already exists for the given lecturer, module, and reminder day
+                var existingReminder = _context.ModuleSchedules
+                    .FirstOrDefault(ms => ms.LecturerEmail == lecturerEmail &&
+                                          ms.ModuleCode == moduleCode &&
+                                          ms.ReminderDay == reminderDay);
+
+                if (existingReminder != null)
+                {
+                    ViewBag.ReminderErrorMessage = "A reminder for this module and day already exists.";
+                    return View("~/Views/AppViews/submitClaim.cshtml");
+                }
+
+                // Create and add a new reminder if none exists
+                var moduleSchedule = new ModuleSchedule
+                {
+                    LecturerEmail = lecturerEmail,
+                    ModuleCode = moduleCode,
+                    ReminderDay = reminderDay
+                };
+
+                // Add the new reminder to the database
+                _context.ModuleSchedules.Add(moduleSchedule);
+                _context.SaveChanges();
+
+                // Success message
+                ViewBag.ReminderSuccessMessage = "Module reminder successfully added!";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ReminderErrorMessage = "An error occurred while adding the module reminder. Please try again.";
+            }
+
+            return View("~/Views/AppViews/submitClaim.cshtml");
+        }
+
+        // GET: Display today's module schedule reminders
+        public IActionResult ModuleScheduleReminder()
+        {
+            var lecturerEmail = HttpContext.Session.GetString("LecturerEmail");
+
+            if (string.IsNullOrEmpty(lecturerEmail))
+            {
+                return RedirectToAction("login_Lecturer");
+            }
+
+            // Get today's day of the week
+            var currentDay = DateTime.Now.DayOfWeek.ToString();
+
+            // Fetch module schedules for the current day
+            var reminders = _context.ModuleSchedules
+                .Where(ms => ms.LecturerEmail == lecturerEmail && ms.ReminderDay == currentDay)
+                .Select(ms => new ModuleScheduleReminderViewModel
+                {
+                    ModuleCode = ms.ModuleCode,
+                    ReminderDay = ms.ReminderDay
+                })
+                .ToList();
+
+            if (!reminders.Any())
+            {
+                ViewBag.ErrorMessage = "No reminders found for today.";
+            }
+
+            return View("~/Views/AppViews/ModuleScheduleReminder.cshtml", reminders);
         }
     }
 }

@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using Claim_System.Data; // Ensure this namespace is correct
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Claim_System.Models
+﻿namespace Claim_System.Models
 {
     public class ClaimStatusViewModel
     {

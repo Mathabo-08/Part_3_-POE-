@@ -1,0 +1,75 @@
+﻿@model List<Claim_System.Models.ModuleScheduleReminderViewModel>
+
+@{
+    ViewData["Title"] = "Module Schedule Reminder";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Display Success Message -->
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.SuccessMessage
+    </div>
+}
+
+<!-- Display Error Message -->
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<!-- Check if the model is not null and contains reminders -->
+@if (Model != null && Model.Any())
+{
+    <h3>Today's Schedule Reminder:</h3>
+    <ul>
+        @foreach (var reminder in Model)
+        {
+            <li>Module: <strong>@reminder.ModuleCode</strong> - Reminder for @reminder.ReminderDay</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No module reminders for today.</p>
+}
+
+<!-- Module Reminder Submission Form -->
+<h3>Submit Module Schedule Reminder</h3>
+<form method="post" asp-controller="Lecturer" asp-action="SubmitModuleScheduleReminder" id="submitReminderForm">
+    @Html.AntiForgeryToken() <!-- AntiForgeryToken for additional security -->
+
+    <div class="form-group">
+        <label for="ModuleCode">Module Code</label>
+        <input type="text" class="form-control" id="ModuleCode" name="moduleCode" required />
+    </div>
+
+    <div class="form-group">
+        <label for="ReminderDay">Reminder Day</label>
+        <select class="form-control" id="ReminderDay" name="reminderDay" required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Reminder</button>
+</form>
+
+<!-- Action Buttons Wrapper -->
+<div class="action-buttons">
+    <!-- Back to Submit Claim page -->
+    <a href="@Url.Action("submitClaim", "Lecturer")" class="button-link">Back to Submit Claim</a>
+</div>
+
+<!-- Footer Links -->
+<div class="footer-links">
+    <a href="@Url.Action("userType", "UserType")" class="button-link">Home</a>
+    <a href="@Url.Action("viewSubmittedClaims", "Lecturer")" class="button-link">View Submitted Claims</a>
+</div>
